@@ -52,8 +52,6 @@ namespace BeFit.Controllers
                     ActivityName = "Bieganie (Dystans)",
                     SessionsLast4Weeks = bieganieStats.Count,
                     TotalCalculatedReps = (long)bieganieStats.TotalDistance,
-                    MaxLoad = bieganieStats.MaxDistance,
-                    AverageLoad = bieganieStats.TotalDistance / bieganieStats.Count,
                     TotalTime = totalBieganieTime
                 });
             }
@@ -89,8 +87,6 @@ namespace BeFit.Controllers
                     ActivityName = "Plywanie (Dystans)",
                     SessionsLast4Weeks = plywanieStats.Count,
                     TotalCalculatedReps = (long)plywanieStats.TotalDistance,
-                    MaxLoad = plywanieStats.MaxDistance,
-                    AverageLoad = plywanieStats.TotalDistance / plywanieStats.Count,
                     TotalTime = totalPlywanieTime
                 });
             }
@@ -128,7 +124,7 @@ namespace BeFit.Controllers
                     TotalCalculatedReps = wyciskanieStats.TotalReps,
                     MaxLoad = wyciskanieStats.MaxLoad,
                     AverageLoad = wyciskanieStats.AvgLoad,
-                    TotalTime = TimeSpan.Zero
+                    TotalTime = totalWyciskanieTime
                 });
             }
 

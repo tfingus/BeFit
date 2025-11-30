@@ -57,7 +57,7 @@ namespace BeFit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,Dystans,TemperaturaWody,Styl,UzytkownikId")] PlywanieDTO plywanieDTO)
+        public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,Dystans,TemperaturaWody,Styl")] PlywanieDTO plywanieDTO)
         {
 
             Plywanie plywanie = new Plywanie()
@@ -67,6 +67,7 @@ namespace BeFit.Controllers
                 EndDate = plywanieDTO.EndDate,
                 Dystans = plywanieDTO.Dystans,
                 TemperaturaWody = plywanieDTO.TemperaturaWody,
+                Styl = plywanieDTO.Styl,
                 UzytkownikId = GetUserId()
             };
             if (ModelState.IsValid)

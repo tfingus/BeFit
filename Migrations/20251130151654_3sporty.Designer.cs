@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeFit.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251130145643_3sporty")]
+    [Migration("20251130151654_3sporty")]
     partial class _3sporty
     {
         /// <inheritdoc />
@@ -95,9 +95,6 @@ namespace BeFit.Migrations
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("Obciazenie")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("TEXT");

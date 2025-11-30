@@ -165,7 +165,6 @@ namespace BeFit.Migrations
                     StartDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     EndDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Dystans = table.Column<int>(type: "INTEGER", nullable: false),
-                    Obciazenie = table.Column<int>(type: "INTEGER", nullable: false),
                     UzytkownikId = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
