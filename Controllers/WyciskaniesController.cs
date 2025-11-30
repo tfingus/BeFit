@@ -19,7 +19,7 @@ namespace BeFit.Controllers
     public class WyciskaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private string GetUserId()
+        private string GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         }
@@ -75,7 +75,7 @@ namespace BeFit.Controllers
                 Obciazenie = wyciskanieDTO.Obciazenie,
                 LiczbaSerii = wyciskanieDTO.LiczbaSerii,
                 PowtorzeniaWSerii = wyciskanieDTO.PowtorzeniaWSerii,
-                UzytkownikId = GetUserId()
+                UzytkownikId = GetCurrentUserId()
             };
             if (ModelState.IsValid)
             {

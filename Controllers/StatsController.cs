@@ -1,10 +1,12 @@
 ﻿using BeFit.Data;
 using BeFit.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace BeFit.Controllers
 {
+    [Authorize]
     public class StatsController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -12,7 +12,7 @@ namespace BeFit.Controllers
     public class PlywaniesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private string GetUserId()
+        private string GetCurrentUserId()
         {
             return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
         }
@@ -68,7 +68,7 @@ namespace BeFit.Controllers
                 Dystans = plywanieDTO.Dystans,
                 TemperaturaWody = plywanieDTO.TemperaturaWody,
                 Styl = plywanieDTO.Styl,
-                UzytkownikId = GetUserId()
+                UzytkownikId = GetCurrentUserId()
             };
             if (ModelState.IsValid)
             {

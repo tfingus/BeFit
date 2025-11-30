@@ -14,11 +14,10 @@ namespace BeFit.Controllers
     public class BieganiesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private string GetUserId()
+        private string GetCurrentUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
-
         public BieganiesController(ApplicationDbContext context)
         {
             _context = context;
@@ -27,6 +26,10 @@ namespace BeFit.Controllers
         // GET: Bieganies
         public async Task<IActionResult> Index()
         {
+            var currentUserId = GetCurrentUserId();
+            var userBieganieEntries = _context.Bieganie
+                .Where(b => b.UzytkownikId == currentUserId);
+
             return View(await _context.Bieganie.ToListAsync());
         }
 
@@ -40,7 +43,7 @@ namespace BeFit.Controllers
 
             var bieganie = await _context.Bieganie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (bieganie == null)
+            if (bieganie == null || bieganie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -69,7 +72,7 @@ namespace BeFit.Controllers
                 StartDate = bieganieDTO.StartDate,
                 EndDate = bieganieDTO.EndDate,
                 Dystans = bieganieDTO.Dystans,
-                UzytkownikId = GetUserId(),
+                UzytkownikId = GetCurrentUserId(),
             };
             if (ModelState.IsValid)
             {
@@ -90,7 +93,7 @@ namespace BeFit.Controllers
             }
 
             var bieganie = await _context.Bieganie.FindAsync(id);
-            if (bieganie == null)
+            if (bieganie == null || bieganie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -108,6 +111,10 @@ namespace BeFit.Controllers
             {
                 return NotFound();
             }
+            if (bieganie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
 
             if (ModelState.IsValid)
             {
@@ -118,7 +125,7 @@ namespace BeFit.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BieganieExists(bieganie.Id))
+                    if (!_context.Bieganie.Any(e => e.Id == bieganie.Id))
                     {
                         return NotFound();
                     }
@@ -142,7 +149,7 @@ namespace BeFit.Controllers
 
             var bieganie = await _context.Bieganie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (bieganie == null)
+            if (bieganie == null || bieganie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -156,6 +163,10 @@ namespace BeFit.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var bieganie = await _context.Bieganie.FindAsync(id);
+            if (bieganie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
             if (bieganie != null)
             {
                 _context.Bieganie.Remove(bieganie);
