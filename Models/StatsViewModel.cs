@@ -1,4 +1,4 @@
-﻿namespace BeFit.ViewModels
+﻿namespace BeFit.Models
 {
     public class StatsViewModel
     {

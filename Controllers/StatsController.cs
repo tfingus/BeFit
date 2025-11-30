@@ -1,5 +1,5 @@
 ﻿using BeFit.Data;
-using BeFit.ViewModels;
+using BeFit.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
