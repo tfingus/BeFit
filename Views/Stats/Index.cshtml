@@ -3,14 +3,10 @@
 @model IEnumerable<BeFit.ViewModels.StatsViewModel>
 
 @{
-    ViewData["Title"] = "Statystyki Aktywności";
+    ViewData["Title"] = "Statystyki aktywności";
 }
 
-<h1>Statystyki Aktywności (Ostatnie 4 tygodnie)</h1>
-
-<p>
-    Dane dynamicznie wygenerowane przez Entity Framework (Linq to Entities).
-</p>
+<h1>Statystyki aktywności (ostatnie 4 tygodnie)</h1>
 
 <table class="table">
     <thead>
@@ -22,16 +18,16 @@
                 @Html.DisplayNameFor(model => model.SessionsLast4Weeks)
             </th>
             <th>
-                Łączna liczba powtórzeń/dystans
+                Łączny dystans / liczba powtórzeń
             </th>
             <th>
                 Łączny czas trwania
             </th>
             <th>
-                Maksymalne obciążenie
+                Maksymalny dystans/obciążenie
             </th>
             <th>
-                Średnie obciążenie
+                Średni dystans/obciążenie
             </th>
         </tr>
     </thead>
@@ -67,7 +63,14 @@
             <td>
                 @if (item.MaxLoad > 0)
                 {
-                    @Html.DisplayFor(modelItem => item.MaxLoad) @:kg
+                    if (item.ActivityName.Contains("Wyciskanie"))
+                        {
+                        @Html.DisplayFor(modelItem => item.MaxLoad) @:kg
+        }
+                    else 
+        {
+                       @Html.DisplayFor(modelItem => item.MaxLoad) @:m
+        }
                 }
                 else
                 {
@@ -77,7 +80,14 @@
             <td>
                 @if (item.AverageLoad > 0)
                 {
-                    @Html.DisplayFor(modelItem => item.AverageLoad) @:kg
+                    if (item.ActivityName.Contains("Wyciskanie"))
+        {
+            @Html.DisplayFor(modelItem => item.AverageLoad) @:kg
+        }
+        else 
+        {
+            @Html.DisplayFor(modelItem => item.AverageLoad) @:m
+        }
                 }
                 else
                 {
