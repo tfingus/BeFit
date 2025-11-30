@@ -14,8 +14,6 @@ namespace BeFit.DTOs
         public DateTime EndDate { get; set; }
         [Display(Name = "Dystans (w metrach)")]
         public int Dystans { get; set; }
-        [Display(Name = "Założone dodatkowe obciążenie (w kg)")]
-        public int Obciazenie { get; set; }
         public BieganieDTO() { }
         public BieganieDTO(Bieganie bieganie)
         {
@@ -23,7 +21,6 @@ namespace BeFit.DTOs
             StartDate = bieganie.StartDate;
             EndDate = bieganie.EndDate;
             Dystans = bieganie.Dystans;
-            Obciazenie = bieganie.Obciazenie;
         }
 
 

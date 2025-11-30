@@ -17,8 +17,6 @@ namespace BeFit.Models
         public DateTime EndDate { get; set; }
         [Display(Name = "Dystans (w metrach)")]
         public int Dystans { get; set; }
-        [Display(Name = "Założone dodatkowe obciążenie (w kg)")]
-        public int Obciazenie { get; set; }
         [Required]
         public string? UzytkownikId { get; set; }
         [Display(Name = "Created by")]

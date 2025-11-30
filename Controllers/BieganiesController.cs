@@ -60,7 +60,7 @@ namespace BeFit.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,Dystans,Obciazenie,UzytkownikId")] BieganieDTO bieganieDTO)
+        public async Task<IActionResult> Create([Bind("Id,StartDate,EndDate,Dystans,UzytkownikId")] BieganieDTO bieganieDTO)
         {
 
             Bieganie bieganie = new Bieganie()
@@ -69,7 +69,6 @@ namespace BeFit.Controllers
                 StartDate = bieganieDTO.StartDate,
                 EndDate = bieganieDTO.EndDate,
                 Dystans = bieganieDTO.Dystans,
-                Obciazenie = bieganieDTO.Obciazenie,
                 UzytkownikId = GetUserId(),
             };
             if (ModelState.IsValid)
@@ -103,7 +102,7 @@ namespace BeFit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Dystans,Obciazenie")] Bieganie bieganie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,StartDate,EndDate,Dystans")] Bieganie bieganie)
         {
             if (id != bieganie.Id)
             {
