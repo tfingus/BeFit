@@ -1,0 +1,90 @@
+﻿@* Views/Stats/Index.cshtml *@
+
+@model IEnumerable<BeFit.ViewModels.StatsViewModel>
+
+@{
+    ViewData["Title"] = "Statystyki Aktywności";
+}
+
+<h1>Statystyki Aktywności (Ostatnie 4 tygodnie)</h1>
+
+<p>
+    Dane dynamicznie wygenerowane przez Entity Framework (Linq to Entities).
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SessionsLast4Weeks)
+            </th>
+            <th>
+                Łączna liczba powtórzeń/dystans
+            </th>
+            <th>
+                Łączny czas trwania
+            </th>
+            <th>
+                Maksymalne obciążenie
+            </th>
+            <th>
+                Średnie obciążenie
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SessionsLast4Weeks)
+            </td>
+            <td>
+                @if (item.ActivityName.Contains("Dystans"))
+                {
+                    @item.TotalCalculatedReps.ToString("N0") @:m
+                }
+                else
+                {
+                    @item.TotalCalculatedReps.ToString("N0")
+                }
+            </td>
+            <td>
+                @if (item.TotalTime.TotalSeconds > 0)
+                {
+                    @item.TotalTime.ToString(@"hh\:mm\:ss")
+                }
+                else
+                {
+                    @:N/A
+                }
+            </td>
+            <td>
+                @if (item.MaxLoad > 0)
+                {
+                    @Html.DisplayFor(modelItem => item.MaxLoad) @:kg
+                }
+                else
+                {
+                    @:N/A
+                }
+            </td>
+            <td>
+                @if (item.AverageLoad > 0)
+                {
+                    @Html.DisplayFor(modelItem => item.AverageLoad) @:kg
+                }
+                else
+                {
+                    @:N/A
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

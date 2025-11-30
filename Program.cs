@@ -22,7 +22,6 @@ builder.Services.AddControllersWithViews();
 var app = builder.Build();
 
 var defaultCulture = "pl-PL";
-app.UseRequestLocalization(localizationOptions);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
