@@ -10,10 +10,10 @@ namespace BeFit.Models
     {
         public int Id { get; set; }
         [Display(Name = "Data rozpoczęcia")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [Display(Name = "Data zakończenia")]
-        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
         [Display(Name = "Dystans (w metrach)")]
         public int Dystans { get; set; }

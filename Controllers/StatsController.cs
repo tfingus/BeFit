@@ -22,9 +22,9 @@ namespace BeFit.Controllers
 
             // A. STATYSTYKI DLA BIEGANIA
             var bieganieSessionTimes = await _context.Bieganie
-                .Where(b => b.StartDate >= fourWeeksAgo)
-                .Select(b => new { b.StartDate, b.EndDate })
-                .ToListAsync();
+       .Where(b => b.StartDate >= fourWeeksAgo)
+       .Select(b => new { b.StartDate, b.EndDate })
+       .ToListAsync();
 
             var bieganieStats = await _context.Bieganie
                 .Where(b => b.StartDate >= fourWeeksAgo)
@@ -48,9 +48,11 @@ namespace BeFit.Controllers
 
                 statsList.Add(new StatsViewModel
                 {
-                    ActivityName = "Bieganie ",
+                    ActivityName = "Bieganie",
                     SessionsLast4Weeks = bieganieStats.Count,
                     TotalCalculatedReps = (long)bieganieStats.TotalDistance,
+                    MaxLoad = bieganieStats.MaxDistance,
+                    AverageLoad = bieganieStats.TotalDistance / bieganieStats.Count,
                     TotalTime = totalBieganieTime
                 });
             }
@@ -58,14 +60,14 @@ namespace BeFit.Controllers
 
             // B. STATYSTYKI DLA PŁYWANIA
             var plywanieSessions = await _context.Plywanie
-        .Where(p => p.StartDate >= fourWeeksAgo)
-        .Select(p => new
-        {
-            p.StartDate,
-            p.EndDate,
-            p.Dystans
-        })
-        .ToListAsync();
+      .Where(p => p.StartDate >= fourWeeksAgo)
+      .Select(p => new
+      {
+          p.StartDate,
+          p.EndDate,
+          p.Dystans // Załóżmy, że pole to 'Dystans'
+      })
+      .ToListAsync();
 
             // Inicjalizacja zmiennych
             TimeSpan totalPlywanieTime = TimeSpan.Zero;
@@ -95,10 +97,10 @@ namespace BeFit.Controllers
                 statsList.Add(new StatsViewModel
                 {
                     ActivityName = "Pływanie",
-                    SessionsLast4Weeks = count, // Liczba elementów w liście to liczba sesji
-                    TotalCalculatedReps = (long)totalPlywanieDistance, // Dystans jako 'powtórzenia'
-                    MaxLoad = maxPlywanieDistance,
-                    AverageLoad = averagePlywanieDistance,
+                    SessionsLast4Weeks = count,
+                    TotalCalculatedReps = (long)totalPlywanieDistance,
+                    MaxLoad = maxPlywanieDistance, // Poprawne mapowanie
+                    AverageLoad = averagePlywanieDistance, // Poprawne mapowanie
                     TotalTime = totalPlywanieTime
                 });
             }
