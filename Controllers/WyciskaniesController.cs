@@ -32,7 +32,11 @@ namespace BeFit.Controllers
         // GET: Wyciskanies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Wyciskanie.ToListAsync());
+            var currentUserId = GetCurrentUserId();
+            var userWyciskanieEntries = _context.Wyciskanie
+                .Where(b => b.UzytkownikId == currentUserId);
+
+            return View(await userWyciskanieEntries.ToListAsync());
         }
 
         // GET: Wyciskanies/Details/5
@@ -45,7 +49,7 @@ namespace BeFit.Controllers
 
             var wyciskanie = await _context.Wyciskanie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (wyciskanie == null)
+            if (wyciskanie == null || wyciskanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -96,7 +100,7 @@ namespace BeFit.Controllers
             }
 
             var wyciskanie = await _context.Wyciskanie.FindAsync(id);
-            if (wyciskanie == null)
+            if (wyciskanie == null || wyciskanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -114,7 +118,10 @@ namespace BeFit.Controllers
             {
                 return NotFound();
             }
-
+            if (wyciskanie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
             if (ModelState.IsValid)
             {
                 try
@@ -124,7 +131,7 @@ namespace BeFit.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!WyciskanieExists(wyciskanie.Id))
+                    if (!_context.Bieganie.Any(e => e.Id == wyciskanie.Id))
                     {
                         return NotFound();
                     }
@@ -148,7 +155,7 @@ namespace BeFit.Controllers
 
             var wyciskanie = await _context.Wyciskanie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (wyciskanie == null)
+            if (wyciskanie == null || wyciskanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -162,6 +169,10 @@ namespace BeFit.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var wyciskanie = await _context.Wyciskanie.FindAsync(id);
+            if (wyciskanie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
             if (wyciskanie != null)
             {
                 _context.Wyciskanie.Remove(wyciskanie);

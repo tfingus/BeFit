@@ -25,7 +25,11 @@ namespace BeFit.Controllers
         // GET: Plywanies
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Plywanie.ToListAsync());
+            var currentUserId = GetCurrentUserId();
+            var userPlywanieEntries = _context.Plywanie
+                .Where(b => b.UzytkownikId == currentUserId);
+
+            return View(await userPlywanieEntries.ToListAsync());
         }
 
         // GET: Plywanies/Details/5
@@ -38,7 +42,7 @@ namespace BeFit.Controllers
 
             var plywanie = await _context.Plywanie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (plywanie == null)
+            if (plywanie == null || plywanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -89,7 +93,7 @@ namespace BeFit.Controllers
             }
 
             var plywanie = await _context.Plywanie.FindAsync(id);
-            if (plywanie == null)
+            if (plywanie == null || plywanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -107,6 +111,10 @@ namespace BeFit.Controllers
             {
                 return NotFound();
             }
+            if (plywanie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
 
             if (ModelState.IsValid)
             {
@@ -117,7 +125,7 @@ namespace BeFit.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlywanieExists(plywanie.Id))
+                    if (!_context.Plywanie.Any(e => e.Id == plywanie.Id))
                     {
                         return NotFound();
                     }
@@ -141,7 +149,7 @@ namespace BeFit.Controllers
 
             var plywanie = await _context.Plywanie
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (plywanie == null)
+            if (plywanie == null || plywanie.UzytkownikId != GetCurrentUserId())
             {
                 return NotFound();
             }
@@ -155,6 +163,10 @@ namespace BeFit.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var plywanie = await _context.Plywanie.FindAsync(id);
+            if (plywanie.UzytkownikId != GetCurrentUserId())
+            {
+                return Forbid();
+            }
             if (plywanie != null)
             {
                 _context.Plywanie.Remove(plywanie);

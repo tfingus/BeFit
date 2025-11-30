@@ -116,7 +116,6 @@ namespace BeFit.Controllers
             {
                 return Forbid();
             }
-
             if (ModelState.IsValid)
             {
                 try
