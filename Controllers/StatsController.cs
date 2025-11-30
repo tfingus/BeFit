@@ -82,14 +82,14 @@ namespace BeFit.Controllers
                 })
                 .ToListAsync();
 
-            // Inicjalizacja zmiennych (niezmieniona)
+            // Inicjalizacja zmiennych
             TimeSpan totalPlywanieTime = TimeSpan.Zero;
             double totalPlywanieDistance = 0;
             double maxPlywanieDistance = 0;
 
             if (plywanieSessions.Any())
             {
-                // Logika sumowania (niezmieniona)
+                // Logika sumowania
                 foreach (var session in plywanieSessions)
                 {
                     TimeSpan duration = session.EndDate - session.StartDate;
@@ -107,7 +107,7 @@ namespace BeFit.Controllers
                 int count = plywanieSessions.Count;
                 double averagePlywanieDistance = totalPlywanieDistance / count;
 
-                // 3. Dodanie do listy statystyk (niezmienione)
+                // 3. Dodanie do listy statystyk
                 statsList.Add(new StatsViewModel
                 {
                     ActivityName = "Pływanie",
