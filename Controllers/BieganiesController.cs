@@ -16,7 +16,8 @@ namespace BeFit.Controllers
         private readonly ApplicationDbContext _context;
         private string GetCurrentUserId()
         {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+            // return User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         }
         public BieganiesController(ApplicationDbContext context)
         {
@@ -30,7 +31,7 @@ namespace BeFit.Controllers
             var userBieganieEntries = _context.Bieganie
                 .Where(b => b.UzytkownikId == currentUserId);
 
-            return View(await _context.Bieganie.ToListAsync());
+            return View(await userBieganieEntries.ToListAsync());
         }
 
         // GET: Bieganies/Details/5
