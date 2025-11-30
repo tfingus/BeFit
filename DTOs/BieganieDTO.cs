@@ -7,7 +7,9 @@ namespace BeFit.DTOs
     {
         public int Id { get; set; }
         [Display(Name = "Data i godzina rozpoczęcia")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         [Display(Name = "Data i godzina zakończenia")]
         public DateTime EndDate { get; set; }
         [Display(Name = "Dystans (w metrach)")]

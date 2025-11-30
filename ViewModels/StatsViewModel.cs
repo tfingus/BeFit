@@ -17,7 +17,6 @@
         // Średnie obciążenie (dla ćwiczeń siłowych)
         public double AverageLoad { get; set; }
 
-        // Czas trwania (dla ćwiczeń na czas, np. Bieganie/Pływanie)
         public TimeSpan TotalTime { get; set; }
     }
 }

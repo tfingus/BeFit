@@ -7,8 +7,10 @@ namespace BeFit.DTOs
     {
         public int Id { get; set; }
         [Display(Name = "Data rozpoczęcia")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
         [Display(Name = "Data zakończenia")]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
         [Display(Name = "Obciążenie (w kg)")]
         public int Obciazenie { get; set; }
