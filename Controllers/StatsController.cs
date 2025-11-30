@@ -3,6 +3,7 @@ using BeFit.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BeFit.Controllers
 {
@@ -10,6 +11,10 @@ namespace BeFit.Controllers
     public class StatsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private string GetCurrentUserId()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
+        }
 
         public StatsController(ApplicationDbContext context)
         {
@@ -21,15 +26,18 @@ namespace BeFit.Controllers
         {
             var fourWeeksAgo = DateTime.Now.AddDays(-28);
             var statsList = new List<StatsViewModel>();
+            string currentUserId = GetCurrentUserId();
 
             // A. STATYSTYKI DLA BIEGANIA
-            var bieganieSessionTimes = await _context.Bieganie
-       .Where(b => b.StartDate >= fourWeeksAgo)
-       .Select(b => new { b.StartDate, b.EndDate })
-       .ToListAsync();
+            var baseBieganieQuery = _context.Bieganie
+                                             .Where(b => b.StartDate >= fourWeeksAgo)
+                                             .Where(b => b.UzytkownikId == currentUserId);
 
-            var bieganieStats = await _context.Bieganie
-                .Where(b => b.StartDate >= fourWeeksAgo)
+            var bieganieSessionTimes = await baseBieganieQuery
+                .Select(b => new { b.StartDate, b.EndDate })
+                .ToListAsync();
+
+            var bieganieStats = await baseBieganieQuery
                 .GroupBy(b => 1)
                 .Select(g => new
                 {
@@ -61,23 +69,27 @@ namespace BeFit.Controllers
 
 
             // B. STATYSTYKI DLA PŁYWANIA
-            var plywanieSessions = await _context.Plywanie
-      .Where(p => p.StartDate >= fourWeeksAgo)
-      .Select(p => new
-      {
-          p.StartDate,
-          p.EndDate,
-          p.Dystans // Załóżmy, że pole to 'Dystans'
-      })
-      .ToListAsync();
+            var basePlywanieQuery = _context.Plywanie
+                                             .Where(p => p.StartDate >= fourWeeksAgo)
+                                             .Where(p => p.UzytkownikId == currentUserId);
 
-            // Inicjalizacja zmiennych
+            var plywanieSessions = await basePlywanieQuery
+                .Select(p => new
+                {
+                    p.StartDate,
+                    p.EndDate,
+                    p.Dystans
+                })
+                .ToListAsync();
+
+            // Inicjalizacja zmiennych (niezmieniona)
             TimeSpan totalPlywanieTime = TimeSpan.Zero;
             double totalPlywanieDistance = 0;
             double maxPlywanieDistance = 0;
 
             if (plywanieSessions.Any())
             {
+                // Logika sumowania (niezmieniona)
                 foreach (var session in plywanieSessions)
                 {
                     TimeSpan duration = session.EndDate - session.StartDate;
@@ -95,35 +107,37 @@ namespace BeFit.Controllers
                 int count = plywanieSessions.Count;
                 double averagePlywanieDistance = totalPlywanieDistance / count;
 
-                // 3. Dodanie do listy statystyk
+                // 3. Dodanie do listy statystyk (niezmienione)
                 statsList.Add(new StatsViewModel
                 {
                     ActivityName = "Pływanie",
                     SessionsLast4Weeks = count,
                     TotalCalculatedReps = (long)totalPlywanieDistance,
-                    MaxLoad = maxPlywanieDistance, // Poprawne mapowanie
-                    AverageLoad = averagePlywanieDistance, // Poprawne mapowanie
+                    MaxLoad = maxPlywanieDistance,
+                    AverageLoad = averagePlywanieDistance,
                     TotalTime = totalPlywanieTime
                 });
             }
 
             // C. STATYSTYKI DLA WYCISKANIA
-            var wyciskanieSessionTimes = await _context.Wyciskanie
-       .Where(b => b.StartDate >= fourWeeksAgo)
-       .Select(b => new { b.StartDate, b.EndDate })
-       .ToListAsync();
+            var baseWyciskanieQuery = _context.Wyciskanie
+                                                   .Where(w => w.StartDate >= fourWeeksAgo)
+                                                   .Where(w => w.UzytkownikId == currentUserId);
 
-        var wyciskanieStats = await _context.Wyciskanie
-            .Where(w => w.StartDate >= fourWeeksAgo)
-            .GroupBy(w => 1)
-            .Select(g => new
-            {
-                Count = g.Count(),
-                TotalReps = g.Sum(w => w.LiczbaSerii * w.PowtorzeniaWSerii),
-                MaxLoad = g.Max(w => w.Obciazenie),
-                AvgLoad = g.Average(w => w.Obciazenie)
-            })
-            .FirstOrDefaultAsync();
+            var wyciskanieSessionTimes = await baseWyciskanieQuery
+                .Select(b => new { b.StartDate, b.EndDate })
+                .ToListAsync();
+
+            var wyciskanieStats = await baseWyciskanieQuery
+                .GroupBy(w => 1)
+                .Select(g => new
+                {
+                    Count = g.Count(),
+                    TotalReps = g.Sum(w => w.LiczbaSerii * w.PowtorzeniaWSerii),
+                    MaxLoad = g.Max(w => w.Obciazenie),
+                    AvgLoad = g.Average(w => w.Obciazenie)
+                })
+                .FirstOrDefaultAsync();
 
             if (wyciskanieStats != null && wyciskanieStats.Count > 0)
             {
@@ -131,9 +145,9 @@ namespace BeFit.Controllers
                 foreach (var session in wyciskanieSessionTimes)
                 {
                     TimeSpan duration = session.EndDate - session.StartDate;
-        totalWyciskanieTime += duration;
+                    totalWyciskanieTime += duration;
                 }
-    statsList.Add(new StatsViewModel
+                statsList.Add(new StatsViewModel
                 {
                     ActivityName = "Wyciskanie",
                     SessionsLast4Weeks = wyciskanieStats.Count,
@@ -141,7 +155,7 @@ namespace BeFit.Controllers
                     MaxLoad = wyciskanieStats.MaxLoad,
                     AverageLoad = wyciskanieStats.AvgLoad,
                     TotalTime = totalWyciskanieTime
-});
+                });
             }
 
             return View(statsList);

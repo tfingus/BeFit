@@ -6,16 +6,21 @@ namespace BeFit.DTOs
     public class PlywanieDTO
     {
         public int Id { get; set; }
+        [Required]
         [Display(Name = "Data rozpoczęcia")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
+        [Required]
         [Display(Name = "Data zakończenia")]
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
+        [Required]
         [Display(Name = "Dystans (w metrach)")]
         public int Dystans { get; set; } // dystans w metrach
+        [Required]
         [Display(Name = "Temperatura wody (w °C)")]
         public int TemperaturaWody { get; set; } // temperatura wody w stopniach Celsjusza
+        [Required]
         [Display(Name = "Styl pływania")]
         public string Styl { get; set; }
         public PlywanieDTO() { }
